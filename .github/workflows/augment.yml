@@ -1,0 +1,20 @@
+name: Augment Courses with OpenAI
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'courses/**.json'
+
+jobs:
+  augment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install -r requirements.txt
+      - name: Run augment
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python scripts/augment_courses_with_openai.py --dir courses
